@@ -1,7 +1,5 @@
 # HR Namespace
 
-## Honex Enterprise Deception Environment
-
 ---
 
 ## 1. Overview
