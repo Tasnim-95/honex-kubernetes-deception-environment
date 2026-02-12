@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dmz-ingress
+  namespace: dmz
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: portal.company.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: dmz-django-svc
+            port:
+              number: 80
+

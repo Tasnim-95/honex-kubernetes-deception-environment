@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dmz-django-svc
+  namespace: dmz
+spec:
+  type: ClusterIP
+  selector:
+    app: dmz-django
+  ports:
+    - port: 80
+      targetPort: 8000
+

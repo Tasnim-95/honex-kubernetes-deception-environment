@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dmz-django
+  namespace: dmz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dmz-django
+  template:
+    metadata:
+      labels:
+        app: dmz-django
+    spec:
+      containers:
+      - name: django
+        image: dmz-django:v4
+        ports:
+        - containerPort: 8000
