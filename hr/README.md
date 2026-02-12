@@ -51,13 +51,6 @@ Each backend service uses:
 * 2Gi PersistentVolumeClaim
 * Kubernetes Secret for credentials
 
-### Security Design Principle
-
-Workstations **never connect directly to databases**.
-All communication flows through service APIs to mimic real enterprise architecture.
-
----
-
 ## 4. HR Workstations (Deception Layer)
 
 Each employee workstation is deployed as a Pod but intentionally designed to appear as a real Linux endpoint.
