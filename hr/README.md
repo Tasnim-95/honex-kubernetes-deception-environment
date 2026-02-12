@@ -1,15 +1,3 @@
-tasnimo@DESKTOP-JRQ44IC:~/honex-honeynet$ cat README.md
-تمام 👌
-ده **النسخة النهائية الاحترافية** اللي تتحط في:
-
-```
-honex-honeynet/hr/README.md
-```
-
-جاهزة للرفع على GitHub بشكل Enterprise / Graduation Level 🔥
-
----
-
 # HR Namespace
 
 ## Honex Enterprise Deception Environment
