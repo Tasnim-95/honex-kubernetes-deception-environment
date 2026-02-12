@@ -1,0 +1,20 @@
+
+server:
+  port: 8084
+
+spring:
+  datasource:
+    url: jdbc:mysql://mysql-payroll:3306/payroll_db
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+services:
+  employee-url: http://employee-service:8081/api/employee
+  attendance-url: http://attendance-service:8083/api/attendance/employee
+

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-service
+  namespace: hr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: employee-service
+  template:
+    metadata:
+      labels:
+        app: employee-service
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: employee
+        image: hr-employee:debian
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8081
+        - containerPort: 22
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://employee-db:3306/employee_db
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: EMP_DB_PASS
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee-service
+  namespace: hr
+spec:
+  selector:
+    app: employee-service
+  ports:
+  - port: 8081
+

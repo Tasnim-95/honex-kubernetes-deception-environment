@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+  name: payroll-db
+  namespace: hr
+spec:
+  serviceName: payroll-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payroll-db
+  template:
+    metadata:
+      labels:
+        app: payroll-db
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8
+        env:
+        - name: MYSQL_DATABASE
+          value: payroll_db
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: PAY_DB_PASS
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-payroll
+  namespace: hr
+spec:
+  selector:
+    app: payroll-db
+  ports:
+  - port: 3306
+

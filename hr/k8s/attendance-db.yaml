@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: attendance-db
+  namespace: hr
+spec:
+  serviceName: attendance-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: attendance-db
+  template:
+    metadata:
+      labels:
+        app: attendance-db
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8
+        env:
+        - name: MYSQL_DATABASE
+          value: attendance_db
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: ATT_DB_PASS
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-attendance
+  namespace: hr
+spec:
+  selector:
+    app: attendance-db
+  ports:
+  - port: 3306
+

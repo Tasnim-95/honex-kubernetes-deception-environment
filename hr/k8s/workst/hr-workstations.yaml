@@ -1,0 +1,104 @@
+# ===============================
+# HR WORKSTATION - RECRUITER
+# ===============================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hr-ws-recruiter
+  namespace: hr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hr-ws-recruiter
+  template:
+    metadata:
+      labels:
+        app: hr-ws-recruiter
+    spec:
+      containers:
+      - name: workstation
+        image: honex/hr-workstation:v1
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: USERNAME
+          value: "alice.hr"
+        - name: ROLE
+          value: "RECRUITER"
+        - name: HOSTNAME
+          value: "HONEX-HR-REC-PC01"
+        - name: OPEN_PORT
+          value: "3000"
+        - name: TARGET_SERVICE
+          value: "employee-service:8081"
+
+---
+# ===============================
+# HR WORKSTATION - CLERK
+# ===============================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hr-ws-clerk
+  namespace: hr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hr-ws-clerk
+  template:
+    metadata:
+      labels:
+        app: hr-ws-clerk
+    spec:
+      containers:
+      - name: workstation
+        image: honex/hr-workstation:v1
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: USERNAME
+          value: "mohamed.hr"
+        - name: ROLE
+          value: "CLERK"
+        - name: HOSTNAME
+          value: "HONEX-HR-CLK-PC07"
+        - name: OPEN_PORT
+          value: "631"
+        - name: TARGET_SERVICE
+          value: "attendance-service:8083"
+
+---
+# ===============================
+# HR WORKSTATION - PAYROLL
+# ===============================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hr-ws-payroll
+  namespace: hr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hr-ws-payroll
+  template:
+    metadata:
+      labels:
+        app: hr-ws-payroll
+    spec:
+      containers:
+      - name: workstation
+        image: honex/hr-workstation:v1
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: USERNAME
+          value: "sara.hr"
+        - name: ROLE
+          value: "PAYROLL"
+        - name: HOSTNAME
+          value: "HONEX-HR-PAY-PC12"
+        - name: OPEN_PORT
+          value: "445"
+        - name: TARGET_SERVICE
+          value: "payroll-service:8084"
+

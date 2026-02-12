@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: employee-db
+  namespace: hr
+spec:
+  serviceName: employee-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: employee-db
+  template:
+    metadata:
+      labels:
+        app: employee-db
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8
+        env:
+        - name: MYSQL_DATABASE
+          value: employee_db
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: EMP_DB_PASS
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-employee
+  namespace: hr
+spec:
+  selector:
+    app: employee-db
+  ports:
+  - port: 3306
+

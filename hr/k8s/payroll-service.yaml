@@ -1,0 +1,44 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata:
+  name: payroll-service
+  namespace: hr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payroll-service
+  template:
+    metadata:
+      labels:
+        app: payroll-service
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: payroll
+        image: hr-payroll:debian
+        ports:
+        - containerPort: 8084
+        - containerPort: 22
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://payroll-db:3306/payroll_db
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: PAY_DB_PASS
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payroll-service
+  namespace: hr
+spec:
+  selector:
+    app: payroll-service
+  ports:
+  - port: 8084
+

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: attendance-service
+  namespace: hr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: attendance-service
+  template:
+    metadata:
+      labels:
+        app: attendance-service
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: attendance
+        image: hr-attendance:debian  
+        ports:
+        - containerPort: 8083
+        - containerPort: 22
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://attendance-db:3306/attendance_db
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: ATT_DB_PASS
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: attendance-service
+  namespace: hr
+spec:
+  selector:
+    app: attendance-service
+  ports:
+  - port: 8083
+
